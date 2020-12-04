@@ -1,9 +1,4 @@
-from __future__ import division, print_function
-# coding=utf-8
-import sys
 import os
-import glob
-import re
 import numpy as np
 from matplotlib.pyplot import imread
 import tensorflow as tf
@@ -20,18 +15,20 @@ app = Flask(__name__)
 STATIC_FOLDER = 'static'
 # Path to the folder where we'll store the upload before prediction
 UPLOAD_FOLDER = STATIC_FOLDER + '/uploads'
-# Path to the folder where we store the different models
-MODEL_FOLDER = STATIC_FOLDER + '/models'
 
 labels = ['Cat', 'Dog']
 
+
 def load__model():
-    """Load model once at running time for all the predictions"""
     print('[INFO] : Model loading ................')
-    global model
-    model = tf.keras.models.load_model(
-        MODEL_FOLDER + '/model.h5', custom_objects={"KerasLayer": hub.KerasLayer})
-    print('[INFO] : Model loaded')
+    model = tf.keras.models.load_model('model.h5', custom_objects={
+                                       "KerasLayer": hub.KerasLayer})
+
+    return model
+
+
+model = load__model()
+print('[INFO] : Model loaded ................')
 
 
 def preprocessing_image(path):
@@ -43,7 +40,7 @@ def preprocessing_image(path):
     return img
 
 
-def predict(fullpath):
+def predict(model, fullpath):
     image = preprocessing_image(fullpath)
     pred = model.predict(image)
 
@@ -65,18 +62,12 @@ def upload():
         file.save(fullname)
 
         # Make prediction
-        pred = predict(fullname)
+        pred = predict(model, fullname)
         result = labels[np.argmax(pred)]
 
         return result
     return None
 
 
-def create_app():
-    load__model()
-    return app
-
-
 if __name__ == '__main__':
-    app = create_app()
     app.run(debug=True)
