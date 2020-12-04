@@ -1,5 +1,7 @@
 # Deployment of ML model
 
+For CNN model go to [this](https://github.com/Vivek2509/Dog_vs_cat) where you can find more about how to build CNN model using `tensorflow_hub`.
+
 **Model deployment using flask web app**
 
 - Login into `heroku`
