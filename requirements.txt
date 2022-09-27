@@ -2,5 +2,5 @@ flask==1.1.1
 tensorflow-cpu==2.7.2
 tensorflow_hub==0.10.0
 matplotlib==3.3.3
-numpy==1.18.0
+numpy==1.22.0
 gunicorn==20.0.4
